@@ -10,7 +10,7 @@ module RSpec
         def matches?(subject)
           get_column_from(subject)
 
-          have_column? && correct_type? && correct_options?
+          have_column? && correct_type? && correct_default? && correct_null?
         end
 
         def of_type(type)
@@ -18,15 +18,27 @@ module RSpec
           self
         end
 
-        def with_options(opts = {})
-          @options = opts
+        def default(val)
+          @default = val
+          self
+        end
+
+        def allow_null
+          @null = true
+          self
+        end
+
+        def not_null
+          @null = false
           self
         end
 
         def description
           text = [%(have column named "#{@name}")]
           text << "of type #{@type}" if @type
-          text << "with options #{@options.inspect}" unless @options.empty?
+          text << %(with default value "#{@default}") unless @default == false
+          text << 'allowing null' if @null == true
+          text << 'not allowing null' if @null == false
           text.join(' ')
         end
 
@@ -43,9 +55,10 @@ module RSpec
         def initialize(column_name)
           @name    = column_name
           @type    = nil
+          @null    = nil
+          @default = false
           @table   = nil
           @error   = nil
-          @options = {}
         end
 
         def get_column_from(table)
@@ -73,38 +86,31 @@ module RSpec
           if actual.include?(expected)
             true
           else
-            @error = %(column #{@name} have type [#{actual.join(', ')}])
+            @error = %(it have type [#{actual.join(', ')}])
             false
           end
         end
 
-        def correct_options?
-          return true if @options.empty?
+        def correct_null?
+          return true if @null.nil?
 
-          @options.each_pair do |opt, val|
-            orig_option = opt
-            opt = OPT_MAPPING[opt] if OPT_MAPPING.has_key?(opt)
-
-            if @column.has_key?(opt)
-              if opt == :default
-                test = test_default(val)
-                curr = @column[:ruby_default] || @column[:default]
-              else
-                curr = @column[opt]
-                test = curr == val
-              end
-
-              unless test
-                @error = %(column #{@name} has option "#{orig_option}" with value #{curr})
-                return false
-              end
-            else
-              @error = %(column #{@name} does not have option "#{orig_option}")
-              return false
-            end
+          if @column[:allow_null] == @null
+            true
+          else
+            @error = %(it #{"does not " if @null == true}allow null)
+            false
           end
+        end
 
-          true
+        def correct_default?
+          return true if @default == false
+
+          if [@column[:default], @column[:ruby_default]].include?(@default)
+            true
+          else
+            @error = %(it has default value "#{@column[:ruby_default] || @column[:default]}")
+            false
+          end
         end
 
         def test_default(val)

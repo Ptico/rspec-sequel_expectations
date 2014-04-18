@@ -77,7 +77,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
       it 'should set error message' do
         expect { result }.to change {
           matcher.failure_message
-        }.to %(expected users to #{matcher.description} but column full_name have type [string, varchar(255)])
+        }.to %(expected users to #{matcher.description} but it have type [string, varchar(255)])
       end
 
       it 'should set negative error message' do
@@ -88,46 +88,101 @@ describe RSpec::Matchers::Sequel::HaveColumn do
     end
   end
 
-  describe 'options' do
-    context 'when correct options' do
-      let(:matcher) { have_column(:age).with_options(default: 18, null: false) }
+  describe 'default' do
+    context 'when match' do
+      let(:matcher) { have_column(:age).default(18) }
 
       it 'should success' do
         expect(result).to be(true)
       end
 
       it 'should have description' do
-        expect(matcher.description).to eql('have column named "age" with options {:default=>18, :null=>false}')
+        expect(matcher.description).to eql('have column named "age" with default value "18"')
       end
     end
 
-    context 'when missing option' do
-      let(:matcher) { have_column(:age).with_options(uniq: true) }
+    context 'when did not match' do
+      let(:matcher) { have_column(:age).default(2) }
 
       it 'should fail' do
         expect(result).to be(false)
       end
 
-      it 'should set error message' do
-        expect { result }.to change {
-          matcher.failure_message
-        }.to %(expected users to #{matcher.description} but column age does not have option "uniq")
-      end
-    end
-
-    context 'when incorrect options' do
-      let(:matcher) { have_column(:age).with_options(default: 18, null: true) }
-
-      it 'should fail' do
-        expect(result).to be(false)
+      it 'should have description' do
+        expect(matcher.description).to eql('have column named "age" with default value "2"')
       end
 
       it 'should set error message' do
         expect { result }.to change {
           matcher.failure_message
-        }.to %(expected users to #{matcher.description} but column age has option "null" with value false)
+        }.to %(expected users to #{matcher.description} but it has default value "18")
       end
     end
   end
+
+  describe 'allow_null' do
+    context 'when match' do
+      let(:matcher) { have_column(:full_name).allow_null }
+
+      it 'should success' do
+        expect(result).to be(true)
+      end
+
+      it 'should have description' do
+        expect(matcher.description).to eql('have column named "full_name" allowing null')
+      end
+    end
+
+    context 'when did not match' do
+      let(:matcher) { have_column(:age).allow_null }
+
+      it 'should fail' do
+        expect(result).to be(false)
+      end
+
+      it 'should have description' do
+        expect(matcher.description).to eql('have column named "age" allowing null')
+      end
+
+      it 'should set error message' do
+        expect { result }.to change {
+          matcher.failure_message
+        }.to %(expected users to #{matcher.description} but it does not allow null)
+      end
+    end
+  end
+
+  describe 'not_null' do
+    context 'when match' do
+      let(:matcher) { have_column(:age).not_null }
+
+      it 'should success' do
+        expect(result).to be(true)
+      end
+
+      it 'should have description' do
+        expect(matcher.description).to eql('have column named "age" not allowing null')
+      end
+    end
+
+    context 'when did not match' do
+      let(:matcher) { have_column(:full_name).not_null }
+
+      it 'should fail' do
+        expect(result).to be(false)
+      end
+
+      it 'should have description' do
+        expect(matcher.description).to eql('have column named "full_name" not allowing null')
+      end
+
+      it 'should set error message' do
+        expect { result }.to change {
+          matcher.failure_message
+        }.to %(expected users to #{matcher.description} but it allow null)
+      end
+    end
+  end
+
 
 end
