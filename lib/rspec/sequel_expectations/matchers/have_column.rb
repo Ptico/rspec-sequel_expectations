@@ -3,9 +3,6 @@ module RSpec
     module Sequel
 
       class HaveColumn
-        OPT_MAPPING = {
-          null: :allow_null
-        }.freeze
 
         def matches?(subject)
           get_column_from(subject)
@@ -111,10 +108,6 @@ module RSpec
             @error = %(it has default value "#{@column[:ruby_default] || @column[:default]}")
             false
           end
-        end
-
-        def test_default(val)
-          [@column[:default], @column[:ruby_default]].include?(val)
         end
 
       end
