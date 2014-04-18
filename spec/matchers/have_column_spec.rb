@@ -88,9 +88,9 @@ describe RSpec::Matchers::Sequel::HaveColumn do
     end
   end
 
-  describe 'default' do
+  describe 'with_default' do
     context 'when match' do
-      let(:matcher) { have_column(:age).default(18) }
+      let(:matcher) { have_column(:age).with_default(18) }
 
       it 'should success' do
         expect(result).to be(true)
@@ -102,7 +102,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
     end
 
     context 'when did not match' do
-      let(:matcher) { have_column(:age).default(2) }
+      let(:matcher) { have_column(:age).with_default(2) }
 
       it 'should fail' do
         expect(result).to be(false)

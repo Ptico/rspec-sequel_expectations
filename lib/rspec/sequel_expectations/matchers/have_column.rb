@@ -18,7 +18,7 @@ module RSpec
           self
         end
 
-        def default(val)
+        def with_default(val)
           @default = val
           self
         end
