@@ -12,7 +12,7 @@ end
 describe 'companies table' do
   let(:table) { :companies }
 
-  it { expect(table).to have_column(:name).of_type(String).not_null.default('') }
+  it { expect(table).to have_column(:name).of_type(String).not_null.with_default('') }
 end
 ```
 
