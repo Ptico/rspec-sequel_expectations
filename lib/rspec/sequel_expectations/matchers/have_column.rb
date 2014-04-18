@@ -34,7 +34,7 @@ module RSpec
           %(expected #{@table} to #{description} but #{@error})
         end
 
-        def negative_failure_message
+        def failure_message_when_negated
           %(did not expect #{@table} to #{description})
         end
 

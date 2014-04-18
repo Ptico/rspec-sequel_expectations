@@ -44,7 +44,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
 
       it 'should set negative error message' do
         expect { result }.to change {
-          matcher.negative_failure_message
+          matcher.failure_message_when_negated
         }.to("did not expect users to #{matcher.description}")
       end
     end
@@ -82,7 +82,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
 
       it 'should set negative error message' do
         expect { result }.to change {
-          matcher.negative_failure_message
+          matcher.failure_message_when_negated
         }.to %(did not expect users to #{matcher.description})
       end
     end
