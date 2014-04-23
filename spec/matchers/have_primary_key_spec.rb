@@ -21,6 +21,7 @@ describe RSpec::Matchers::Sequel::HavePrimaryKey do
   after :all do
     DB.drop_table(:companies)
     DB.drop_table(:users)
+    DB.drop_table(:sessions)
   end
 
   let(:result) { matcher.matches?(table) }

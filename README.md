@@ -14,6 +14,9 @@ describe 'companies table' do
 
   it { expect(table).to have_primary_keys(:id, :city_id) }
   it { expect(table).to have_column(:name).of_type(String).not_null.with_default('') }
+
+  it { expect(table).to have_unique_index_on(:email) }
+  it { expect(table).to have_index_on([:password, :email]).named('companies_credentials') }
 end
 ```
 
