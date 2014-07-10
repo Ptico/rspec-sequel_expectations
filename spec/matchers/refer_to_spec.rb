@@ -9,7 +9,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
     DB.create_table(:posts) do
       column :text, String
 
-      foreign_key :user_id, :users, on_update: :cascade
+      foreign_key :user_id, :users, on_update: :cascade, key: :id
     end
   end
 
@@ -31,7 +31,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
       end
 
       it 'should have description' do
-        expect(metcher.description).to eql('have reference to "users"')
+        expect(matcher.description).to eql('have reference to "users"')
       end
     end
 
@@ -51,7 +51,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
       it 'should set negative error message' do
         expect { result }.to change {
           matcher.failure_message_when_negated
-        }.to("did not expect posts to #{matcher.description}")
+        }.to %(did not expect "posts" to #{matcher.description})
       end
     end
   end
@@ -81,12 +81,6 @@ describe RSpec::Matchers::Sequel::ReferTo do
           matcher.failure_message
         }.to %(expected "posts" to #{matcher.description} but "posts" does not have a foreign key column "blabla_id")
       end
-
-      it 'should set negative error message' do
-        expect { result }.to change {
-          matcher.failure_message_when_negated
-        }.to %(did not expect "posts" to #{matcher.description} but it has column "blabla_id")
-      end
     end
   end
 
@@ -114,12 +108,6 @@ describe RSpec::Matchers::Sequel::ReferTo do
         expect { result }.to change {
           matcher.failure_message
         }.to %(expected "posts" to #{matcher.description} but "users" does not have a primary key column "blabla")
-      end
-
-      it 'should set negative error message' do
-        expect { result }.to change {
-          matcher.failure_message_when_negated
-        }.to %(did not expect "posts" to #{matcher.description} but it has primary key "blabla")
       end
     end
   end
@@ -149,18 +137,12 @@ describe RSpec::Matchers::Sequel::ReferTo do
           matcher.failure_message
         }.to %(expected "posts" to #{matcher.description} but reference does not have action "blabla" on update)
       end
-
-      it 'should set negative error message' do
-        expect { result }.to change {
-          matcher.failure_message_when_negated
-        }.to %(did not expect "posts" to #{matcher.description} but it has action "blabla")
-      end
     end
   end
 
   describe 'on_delete' do
     context 'when delete action right' do
-      let(:matcher) { refer_to(:users).on_update(:no_action) }
+      let(:matcher) { refer_to(:users).on_delete(:no_action) }
 
       it 'should success' do
         expect(result).to be(true)
@@ -172,7 +154,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
     end
 
     context 'when update action wrong' do
-      let(:matcher) { refer_to(:users).on_update(:blabla) }
+      let(:matcher) { refer_to(:users).on_delete(:blabla) }
 
       it 'should fail' do
         expect(result).to be(false)
@@ -182,12 +164,6 @@ describe RSpec::Matchers::Sequel::ReferTo do
         expect { result }.to change {
           matcher.failure_message
         }.to %(expected "posts" to #{matcher.description} but reference does not have action "blabla" on delete)
-      end
-
-      it 'should set negative error message' do
-        expect { result }.to change {
-          matcher.failure_message_when_negated
-        }.to %(did not expect "posts" to #{matcher.description} but it has action "blabla")
       end
     end
   end
