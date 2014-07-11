@@ -1,9 +1,7 @@
 module RSpec
   module Matchers
     module Sequel
-
       class ReferTo
-
         def matches?(subject)
           get_reference_for(subject)
 
@@ -47,7 +45,6 @@ module RSpec
         def failure_message_when_negated
           %(did not expect "#{@relation}" to #{description})
         end
-
 
       private
 
