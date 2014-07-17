@@ -56,9 +56,9 @@ describe RSpec::Matchers::Sequel::ReferTo do
     end
   end
 
-  describe 'with_fk' do
+  describe 'from_fk' do
     context 'when foreign key column exist' do
-      let(:matcher) { refer_to(:users).with_fk(:user_id) }
+      let(:matcher) { refer_to(:users).from_fk(:user_id) }
 
       it 'should success' do
         expect(result).to be(true)
@@ -70,7 +70,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
     end
 
     context 'when foreign key column not exist' do
-      let(:matcher) { refer_to(:users).with_fk(:blabla_id) }
+      let(:matcher) { refer_to(:users).from_fk(:blabla_id) }
 
       it 'should fail' do
         expect(result).to be(false)
@@ -86,7 +86,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
 
   describe 'with_pk' do
     context 'when primary key column exist' do
-      let(:matcher) { refer_to(:users).with_pk(:id) }
+      let(:matcher) { refer_to(:users).to_pk(:id) }
 
       it 'should success' do
         expect(result).to be(true)
@@ -98,7 +98,7 @@ describe RSpec::Matchers::Sequel::ReferTo do
     end
 
     context 'when primary key column not exist' do
-      let(:matcher) { refer_to(:users).with_pk(:blabla) }
+      let(:matcher) { refer_to(:users).to_pk(:blabla) }
 
       it 'should fail' do
         expect(result).to be(false)

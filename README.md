@@ -17,6 +17,8 @@ describe 'companies table' do
 
   it { expect(table).to have_unique_index_on(:email) }
   it { expect(table).to have_index_on([:password, :email]).named('companies_credentials') }
+
+  it { expect(table).to refer_to(:city).from_fk(:city_id).to_pk(:id).on_update(:cascade).on_delete(:set_null) }
 end
 ```
 
@@ -36,7 +38,7 @@ Or install it yourself as:
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/rspec-sequel_expectations/fork )
+1. Fork it ( https://github.com/Ptico/rspec-sequel_expectations/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

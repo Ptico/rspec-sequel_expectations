@@ -8,12 +8,12 @@ module RSpec
           refer_to? && correct_fk? && correct_pk? && correct_update? && correct_delete?
         end
 
-        def with_fk(key)
+        def from_fk(key)
           @foreign_key = key
           self
         end
 
-        def with_pk(key)
+        def to_pk(key)
           @primary_key = key
           self
         end
