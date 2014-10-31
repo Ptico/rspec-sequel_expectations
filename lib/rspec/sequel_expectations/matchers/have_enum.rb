@@ -5,7 +5,7 @@ module RSpec
       # http://www.rubydoc.info/gems/sequel/4.13.0/Sequel/Postgres/EnumDatabaseMethods
       class HaveEnum
         def matches?(db)
-            x = DB.fetch("SELECT '#{@enum_name}'::regtype;").first
+            x = db.fetch("SELECT '#{@enum_name}'::regtype;").first
             x[:regtype] == @enum_name
           rescue ::Sequel::DatabaseError => e
             return false if e.message[0..18] == 'PG::UndefinedObject'
