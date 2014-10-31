@@ -3,6 +3,7 @@ require 'spec_helper'
 describe RSpec::Matchers::Sequel::ReferTo do
   before :all do
     DB.create_table(:users) do
+      primary_key :id
       column :name, String
     end
 

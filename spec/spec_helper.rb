@@ -1,7 +1,10 @@
 require 'sequel'
 require 'rspec/sequel_expectations'
+require 'faker'
+require_relative '../db'
 
-DB = Sequel.sqlite(':memory:')
+
+DB = Sequelize.connection
 
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
