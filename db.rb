@@ -6,3 +6,7 @@ Sequelize.configure do
 end
 
 Sequelize.setup(ENV['DB_ENV'] || 'test')
+
+DB = Sequelize.connection
+
+DB.extension(:pg_enum)

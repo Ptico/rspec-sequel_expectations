@@ -3,9 +3,6 @@ require 'rspec/sequel_expectations'
 require 'faker'
 require_relative '../db'
 
-
-DB = Sequelize.connection
-
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
@@ -20,7 +17,6 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.include RSpec::Matchers::Sequel
-
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
