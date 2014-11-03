@@ -1,5 +1,4 @@
 require 'spec_helper'
-require "pry"
 
 describe RSpec::Matchers::Sequel::HaveEnum do
   before :all do

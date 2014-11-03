@@ -13,11 +13,11 @@ module RSpec
         end
         
         def failure_message_when_negated
-            'when negated '
+          "expected database not to have enum '#{@enum_name}'"
         end
         
         def failure_message
-          'failure_message'
+          "expected database to have enum '#{@enum_name}'"
         end
         
         private
