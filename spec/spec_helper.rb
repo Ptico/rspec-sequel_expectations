@@ -1,6 +1,7 @@
 require 'sequel'
 require 'rspec/sequel_expectations'
 require 'faker'
+require 'pry'
 require_relative '../db'
 
 RSpec.configure do |config|

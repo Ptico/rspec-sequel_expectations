@@ -31,7 +31,7 @@ describe RSpec::Matchers::Sequel::HaveEnum do
     end
 
     it 'returns false if enum values differ' do
-      expect(DB).not_to have_enum(@enum_name).with_types(@types.push "something_new" ) 
+      expect(DB).not_to have_enum(@enum_name).with_types(@types.dup.push "something_new" ) 
     end
   end
 end
