@@ -45,7 +45,7 @@ module RSpec
           return true if @enum_types.empty?
           sql = "SELECT e.enumlabel FROM pg_enum e JOIN pg_type t ON t.oid = e.enumtypid WHERE t.typname = '#{@enum_name}';"
           types = @db.fetch(sql).reduce([]) { |memo, enum| memo << enum[:enumlabel]}
-          if @enum_types == types
+          if @enum_types.sort == types.sort
             true
           else
             @error = "but got #{types}"
