@@ -21,10 +21,7 @@ describe RSpec::Matchers::Sequel::HaveEnum do
     end
   end
 
-  describe '#with_values' do 
-    it 'accept array of fields as argument' do
-      expect{described_class.new.with_values(1)}.to raise_error(ArgumentError) 
-    end
+  describe '#with_values' do
 
     it 'returns true if enum have exactly that values' do
       expect(DB).to have_enum(@enum_name).with_values(@values) 

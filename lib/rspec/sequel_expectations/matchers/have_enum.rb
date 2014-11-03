@@ -18,9 +18,8 @@ module RSpec
           "expected database to #{description} #{@error}"
         end
         
-        def with_values(values)
-          raise ArgumentError, 'values must be an array' unless values.is_a? Array 
-          @enum_values = values
+        def with_values(*values)
+          @enum_values = values.flatten
           self
         end
 
