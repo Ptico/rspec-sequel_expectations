@@ -9,6 +9,10 @@ RSpec.configure do |config|
   config.include RSpec::Matchers::Sequel
 end
 
+describe DB do 
+  it { expect(DB).to have_enum('role_types').with_types(%w(admin manager user)) }
+end
+
 describe 'companies table' do
   let(:table) { :companies }
 
