@@ -3,8 +3,8 @@ require 'spec_helper'
 describe RSpec::Matchers::Sequel::HaveEnum do
   before :all do
     @enum_name = Faker::Lorem.word
-    @types = %w(admin manager user inspector)
-    DB.create_enum(@enum_name, @types)
+    @values = %w(admin manager user inspector)
+    DB.create_enum(@enum_name, @values)
   end
 
   after :all do
@@ -21,17 +21,17 @@ describe RSpec::Matchers::Sequel::HaveEnum do
     end
   end
 
-  describe '#with_types' do 
+  describe '#with_values' do 
     it 'accept array of fields as argument' do
-      expect{described_class.new.with_types(1)}.to raise_error(ArgumentError) 
+      expect{described_class.new.with_values(1)}.to raise_error(ArgumentError) 
     end
 
     it 'returns true if enum have exactly that values' do
-      expect(DB).to have_enum(@enum_name).with_types(@types) 
+      expect(DB).to have_enum(@enum_name).with_values(@values) 
     end
 
     it 'returns false if enum values differ' do
-      expect(DB).not_to have_enum(@enum_name).with_types(@types.dup.push "something_new" ) 
+      expect(DB).not_to have_enum(@enum_name).with_values(@values.dup.push "something_new" ) 
     end
   end
 end

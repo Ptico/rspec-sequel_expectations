@@ -7,7 +7,7 @@ module RSpec
       class HaveEnum
         def matches?(db)
            @db = db
-           enum_exists? &&  with_valid_types?
+           enum_exists? &&  with_valid_values?
         end
         
         def failure_message_when_negated
@@ -18,9 +18,9 @@ module RSpec
           "expected database to #{description} #{@error}"
         end
         
-        def with_types(types)
-          raise ArgumentError, 'Types must be an array' unless types.is_a? Array 
-          @enum_types = types
+        def with_values(values)
+          raise ArgumentError, 'values must be an array' unless values.is_a? Array 
+          @enum_values = values
           self
         end
 
@@ -28,7 +28,7 @@ module RSpec
 
         def description
           text = [%(have enum named "#{@enum_name}")]
-          text << %(with types "#{@enum_types}") unless @enum_types.empty?
+          text << %(with values "#{@enum_values}") unless @enum_values.empty?
           text.join(' ')
         end
 
@@ -40,20 +40,20 @@ module RSpec
             raise e
         end
 
-        def with_valid_types?
-          return true if @enum_types.empty?
+        def with_valid_values?
+          return true if @enum_values.empty?
           sql = "SELECT e.enumlabel FROM pg_enum e JOIN pg_type t ON t.oid = e.enumtypid WHERE t.typname = '#{@enum_name}';"
-          types = @db.fetch(sql).reduce([]) { |memo, enum| memo << enum[:enumlabel]}
-          if @enum_types.sort == types.sort
+          values = @db.fetch(sql).reduce([]) { |memo, enum| memo << enum[:enumlabel]}
+          if @enum_values.sort == values.sort
             true
           else
-            @error = "but got #{types}"
+            @error = "but got #{values}"
             false
           end
         end
 
         def initialize(enum_name)
-          @enum_types = []
+          @enum_values = []
           @enum_name = enum_name
         end
       end

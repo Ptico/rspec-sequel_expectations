@@ -10,7 +10,7 @@ RSpec.configure do |config|
 end
 
 describe DB do 
-  it { expect(DB).to have_enum('role_types').with_types(%w(admin manager user)) }
+  it { expect(DB).to have_enum('role_types').with_values(%w(admin manager user)) }
 end
 
 describe 'companies table' do
