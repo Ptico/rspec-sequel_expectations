@@ -1,0 +1,12 @@
+# For available adapters and connection options
+# see: https://github.com/Ptico/sequelize/wiki/Database-configuration
+#
+default: &default
+  adapter: postgres
+  encoding: utf8
+
+development:
+  database: myapp_development
+  user: postgres
+  password: secret
+  <<: *default

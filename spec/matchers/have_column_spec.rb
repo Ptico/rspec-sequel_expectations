@@ -52,7 +52,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
 
   describe 'column type' do
     context 'when correct type' do
-      [String, :string, 'string', 'varchar(255)'].each do |type|
+      [String, :string, 'string', 'text'].each do |type|
         context "with #{type}" do
           let(:matcher) { have_column(:full_name).of_type(type) }
 
@@ -77,7 +77,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
       it 'should set error message' do
         expect { result }.to change {
           matcher.failure_message
-        }.to %(expected users to #{matcher.description} but it have type [string, varchar(255)])
+        }.to %(expected users to #{matcher.description} but it have type [string, text])
       end
 
       it 'should set negative error message' do

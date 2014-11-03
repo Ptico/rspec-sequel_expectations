@@ -1,7 +1,8 @@
 require 'sequel'
 require 'rspec/sequel_expectations'
-
-DB = Sequel.sqlite(':memory:')
+require 'faker'
+require 'pry'
+require_relative '../db'
 
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
@@ -17,7 +18,6 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.include RSpec::Matchers::Sequel
-
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
