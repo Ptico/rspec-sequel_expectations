@@ -1,4 +1,3 @@
-require "pry"
 
 module RSpec
   module Matchers
@@ -29,7 +28,7 @@ module RSpec
 
         def description
           text = [%(have enum named "#{@enum_name}")]
-          text << %(with types "#{@enum_types.join(', ')}") unless @enum_types.empty?
+          text << %(with types "#{@enum_types}") unless @enum_types.empty?
           text.join(' ')
         end
 
