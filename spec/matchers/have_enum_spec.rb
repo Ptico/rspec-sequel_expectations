@@ -16,6 +16,10 @@ describe RSpec::Matchers::Sequel::HaveEnum do
       expect(DB).to have_enum(@enum_name)
     end
 
+    it 'accept symbol as enum name' do 
+      expect(DB).to have_enum(@enum_name.to_sym)
+    end
+
     it 'return false if enum does not exists' do 
       expect(DB).to_not have_enum(@enum_name + "1")
     end

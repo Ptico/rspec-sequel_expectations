@@ -33,7 +33,7 @@ module RSpec
 
         def enum_exists?
           query = @db.fetch("SELECT '#{@enum_name}'::regtype;").first
-          query[:regtype] == @enum_name
+          query[:regtype] == @enum_name.to_s
         rescue ::Sequel::DatabaseError => e
           return false if e.message[0..18] == 'PG::UndefinedObject'
           raise e
