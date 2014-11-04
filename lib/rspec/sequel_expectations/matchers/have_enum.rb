@@ -32,10 +32,14 @@ module RSpec
         end
 
         def enum_exists?
-          query = @db.fetch("SELECT '#{@enum_name}'::regtype;").first
-          query[:regtype] == @enum_name
-        rescue ::Sequel::DatabaseError => e
-          return false if e.message[0..18] == 'PG::UndefinedObject'
+          !!@db.fetch("SELECT '#{@enum_name}'::regtype;").first
+        rescue ::Sequel::DatabaseError => e 
+          
+          if e.message[0..18] == 'PG::UndefinedObject'
+            @error = "but it doesn't exist"
+            return false
+          end
+          
           raise e
         end
 
