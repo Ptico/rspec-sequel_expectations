@@ -40,19 +40,21 @@ module RSpec
           @unique = unique
         end
 
-        # if both index and key are present, then postgresql will
         def get_required_index
           @index = DB.indexes(@table).each_pair.detect { |index, opts|
             index.to_s.split('_').last != 'key' && opts[:columns] == @columns
           }
         end
 
+        # PostgreSQL adapter return an index and constraint  as separate objects,
+        # and each has a matching postfix. Though as its name can be specified manyally
+        # following method must take that in account too.
         def get_required_key
           key = DB.indexes(@table).each_pair.detect do |key, opts|
             if  @name
               key == @name
             else
-              (key.to_s.split('_').last == 'key' && opts[:columns] == @columns)
+              key.to_s.split('_').last == 'key' && opts[:columns] == @columns
             end
           end
           @key = key.nil? ? {} : key.last
