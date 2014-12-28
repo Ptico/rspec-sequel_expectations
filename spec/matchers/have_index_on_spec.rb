@@ -4,6 +4,7 @@ describe RSpec::Matchers::Sequel::HaveIndexOn do
   before :all do
     DB.create_table(:users) do
       column :name, String, index: true
+      column :login, String, index: true, unique: true
       column :email, String
       column :company_id, Integer
       column :department_id, Integer
@@ -81,7 +82,7 @@ describe RSpec::Matchers::Sequel::HaveIndexOn do
   end
 
   describe 'uniqueness' do
-    context 'when unique' do
+    context 'when single' do
       let(:matcher) { have_unique_index_on(:email) }
 
       it 'should success' do
@@ -91,6 +92,14 @@ describe RSpec::Matchers::Sequel::HaveIndexOn do
       it 'should have description' do
         expect(matcher.description).to eql('have unique index on [:email]')
       end
+    end
+
+    context 'when composite' do
+        let(:matcher) { have_unique_index_on(:login) }
+
+        it 'should success' do
+          expect(result).to be(true)
+        end
     end
 
     context 'when not unique' do
