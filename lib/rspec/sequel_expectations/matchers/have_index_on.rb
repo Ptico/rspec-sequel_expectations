@@ -1,4 +1,3 @@
-require "pry"
 module RSpec
   module Matchers
     module Sequel
