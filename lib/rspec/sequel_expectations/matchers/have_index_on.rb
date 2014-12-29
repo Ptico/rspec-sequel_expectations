@@ -46,12 +46,13 @@ module RSpec
           }
         end
 
-        # PostgreSQL adapter return an index and constraint  as separate objects,
-        # and each has a matching postfix. Though as its name can be specified manyally
+        # PostgreSQL adapter returns index and constraints as separate objects,
+        # each with an appropriate postfix.
+        # Other case is when constaint name is defined manually and
         # following method must take that in account too.
         def get_required_key
           key = DB.indexes(@table).each_pair.detect do |key, opts|
-            if  @name
+            if @name
               key == @name
             else
               key.to_s.split('_').last == 'key' && opts[:columns] == @columns
