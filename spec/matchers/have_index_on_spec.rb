@@ -95,11 +95,11 @@ describe RSpec::Matchers::Sequel::HaveIndexOn do
     end
 
     context 'when have both index and constraint' do
-        let(:matcher) { have_unique_index_on(:login) }
+      let(:matcher) { have_unique_index_on(:login) }
 
-        it 'should success' do
-          expect(result).to be(true)
-        end
+      it 'should success' do
+        expect(result).to be(true)
+      end
     end
 
     context 'when not unique' do
