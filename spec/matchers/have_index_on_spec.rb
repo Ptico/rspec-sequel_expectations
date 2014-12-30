@@ -94,7 +94,7 @@ describe RSpec::Matchers::Sequel::HaveIndexOn do
       end
     end
 
-    context 'when composite' do
+    context 'when have both index and constraint' do
         let(:matcher) { have_unique_index_on(:login) }
 
         it 'should success' do
