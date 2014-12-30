@@ -14,7 +14,7 @@ module RSpec
 
           get_required_index
 
-          index_present? && unique? && correct_name?
+          index_present? && correct_name? && unique?
         end
 
         def description
@@ -41,9 +41,24 @@ module RSpec
         end
 
         def get_required_index
-          @index = DB.indexes(@table).each_pair.detect { |_, opts|
-            opts[:columns] == @columns
+          @index = DB.indexes(@table).each_pair.detect { |index, opts|
+            index.to_s.split('_').last != 'key' && opts[:columns] == @columns
           }
+        end
+
+        # PostgreSQL adapter returns index and constraints as separate objects,
+        # each with an appropriate postfix.
+        # Other case is when constaint name is defined manually and
+        # following method must take that in account too.
+        def get_required_key
+          key = DB.indexes(@table).each_pair.detect do |key, opts|
+            if @name
+              key == @name
+            else
+              key.to_s.split('_').last == 'key' && opts[:columns] == @columns
+            end
+          end
+          @key = key.nil? ? {} : key.last
         end
 
         def index_present?
@@ -65,7 +80,8 @@ module RSpec
         end
 
         def unique?
-          if @index.last[:unique] == @unique
+          get_required_key
+          if @index.last[:unique] == @unique || @key.fetch(:unique, false) == @unique
             true
           else
             @error = 'index is non-unique'
