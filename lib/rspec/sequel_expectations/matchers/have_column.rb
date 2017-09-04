@@ -77,7 +77,7 @@ module RSpec
         def correct_type?
           return true unless @type
 
-          expected = DB.send(:type_literal, { type: @type }).to_s
+          expected = DB.send(:type_literal, type: @type).to_s
           actual   = [@column[:type].to_s, @column[:db_type].to_s]
 
           if actual.include?(expected)
@@ -94,7 +94,7 @@ module RSpec
           if @column[:allow_null] == @null
             true
           else
-            @error = %(it #{"does not " if @null == true}allow null)
+            @error = %(it #{'does not ' if @null == true}allow null)
             false
           end
         end

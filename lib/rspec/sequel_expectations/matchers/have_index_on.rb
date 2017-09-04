@@ -18,7 +18,7 @@ module RSpec
         end
 
         def description
-          text = %w(have)
+          text = %w[have]
           text << 'unique' if @unique
           text << %(index on #{@columns.inspect})
           text << %(named "#{@name}") if @name
