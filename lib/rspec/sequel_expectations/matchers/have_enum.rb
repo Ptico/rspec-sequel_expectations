@@ -7,7 +7,7 @@ module RSpec
       class HaveEnum
         def matches?(db)
           @db = db
-          enum_exists? &&  with_valid_values?
+          enum_exists? && with_valid_values?
         end
 
         def failure_message_when_negated
@@ -33,13 +33,11 @@ module RSpec
 
         def enum_exists?
           !!@db.fetch("SELECT '#{@enum_name}'::regtype;").first
-        rescue ::Sequel::DatabaseError => e 
-          
+        rescue ::Sequel::DatabaseError => e
           if e.message[0..18] == 'PG::UndefinedObject'
             @error = "but it doesn't exist"
             return false
           end
-          
           raise e
         end
 

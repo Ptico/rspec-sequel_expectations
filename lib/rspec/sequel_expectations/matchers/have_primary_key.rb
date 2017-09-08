@@ -41,12 +41,12 @@ module RSpec
 
         def wording(arr)
           case arr.length
-            when 0
-              %(no primary keys)
-            when 1
-              %(primary key "#{arr.first}")
-            else
-              %(primary keys #{arr.inspect})
+          when 0
+            %(no primary keys)
+          when 1
+            %(primary key "#{arr.first}")
+          else
+            %(primary keys #{arr.inspect})
           end
         end
 
