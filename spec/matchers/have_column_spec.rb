@@ -5,6 +5,7 @@ describe RSpec::Matchers::Sequel::HaveColumn do
     DB.create_table(:users) do
       column :full_name, String
       column :age, Integer, default: 18, null: false
+      column :address, String, size: 200
     end
   end
 
@@ -179,10 +180,40 @@ describe RSpec::Matchers::Sequel::HaveColumn do
       it 'should set error message' do
         expect { result }.to change {
           matcher.failure_message
-        }.to %(expected users to #{matcher.description} but it allow null)
+        }.to %(expected users to #{matcher.description} but it allows null)
       end
     end
   end
 
+  describe 'size' do
+    context 'when matches' do
+      let(:matcher) { have_column(:address).size(200) }
 
+      it 'succeeds' do
+        expect(result).to be(true)
+      end
+
+      it 'has description' do
+        expect(matcher.description).to eql('have column named "address" size 200')
+      end
+    end
+
+    context 'when does not match' do
+      let(:matcher) { have_column(:address).size(100) }
+
+      it 'fails' do
+        expect(result).to be(false)
+      end
+
+      it 'has description' do
+        expect(matcher.description).to eql('have column named "address" size 100')
+      end
+
+      it 'sets error message' do
+        expect { result }.to change {
+          matcher.failure_message
+        }.to %(expected users to #{matcher.description} but it has size "200")
+      end
+    end
+  end
 end
