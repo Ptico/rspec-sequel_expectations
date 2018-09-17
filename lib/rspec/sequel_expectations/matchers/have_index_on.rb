@@ -35,13 +35,14 @@ module RSpec
 
       private
 
-        def initialize(column, unique=false)
+        def initialize(column, opts = {})
+          @db = opts.fetch(:db) { ::Sequel::Model.db }
           @columns = Array(column)
-          @unique = unique
+          @unique = opts.fetch(:unique, false)
         end
 
         def get_required_index
-          @index = DB.indexes(@table).each_pair.detect { |index, opts|
+          @index = @db.indexes(@table).each_pair.detect { |index, opts|
             index.to_s.split('_').last != 'key' && opts[:columns] == @columns
           }
         end
@@ -51,7 +52,7 @@ module RSpec
         # Other case is when constaint name is defined manually and
         # following method must take that in account too.
         def get_required_key
-          key = DB.indexes(@table).each_pair.detect do |key, opts|
+          key = @db.indexes(@table).each_pair.detect do |key, opts|
             if @name
               key == @name
             else
@@ -92,11 +93,11 @@ module RSpec
       end
 
       def have_index_on(column)
-        HaveIndexOn.new(column)
+        HaveIndexOn.new(column, db: defined?(db) ? db : ::Sequel::Model.db)
       end
 
       def have_unique_index_on(column)
-        HaveIndexOn.new(column, true)
+        HaveIndexOn.new(column, unique: true, db: defined?(db) ? db : ::Sequel::Model.db)
       end
       alias :have_uniq_index_on :have_unique_index_on
 
