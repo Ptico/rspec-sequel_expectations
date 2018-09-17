@@ -7,7 +7,7 @@ module RSpec
         def matches?(subject)
           get_column_from(subject)
 
-          have_column? && correct_type? && correct_default? && correct_null?
+          have_column? && correct_type? && correct_default? && correct_null? && correct_size?
         end
 
         def of_type(type)
@@ -30,9 +30,15 @@ module RSpec
           self
         end
 
+        def size(val)
+          @size = val
+          self
+        end
+
         def description
           text = [%(have column named "#{@name}")]
           text << "of type #{@type}" if @type
+          text << "size #{@size}" if @size
           text << %(with default value "#{@default}") unless @default == false
           text << 'allowing null' if @null == true
           text << 'not allowing null' if @null == false
@@ -56,6 +62,7 @@ module RSpec
           @default = false
           @table   = nil
           @error   = nil
+          @size = nil
         end
 
         def get_column_from(table)
@@ -94,7 +101,7 @@ module RSpec
           if @column[:allow_null] == @null
             true
           else
-            @error = %(it #{'does not ' if @null == true}allow null)
+            @error = @null ? 'it does not allow null' : 'it allows null'
             false
           end
         end
@@ -110,6 +117,16 @@ module RSpec
           end
         end
 
+        def correct_size?
+          return true unless @size
+
+          if @column[:max_length] && @column[:max_length] == @size
+            true
+          else
+            @error = %(it has size "#{@column[:max_length] || 'not specified'}")
+            false
+          end
+        end
       end
 
       def have_column(name)
