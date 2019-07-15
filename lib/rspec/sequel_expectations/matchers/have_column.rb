@@ -56,7 +56,7 @@ module RSpec
       private
 
         def initialize(column_name, opts = {})
-          @db = opts.fetch(:db) { ::Sequel::Model.db }
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @name    = column_name
           @type    = nil
           @null    = nil
@@ -131,7 +131,7 @@ module RSpec
       end
 
       def have_column(name)
-        HaveColumn.new(name, db: defined?(db) ? db : ::Sequel::Model.db)
+        HaveColumn.new(name, db: ::Rspec::SequelExpectations.db)
       end
 
     end

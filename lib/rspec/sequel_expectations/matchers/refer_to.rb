@@ -49,7 +49,7 @@ module RSpec
       private
 
         def initialize(table, opts = {})
-          @db = opts.fetch(:db) { ::Sequel::Model.db }
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @table       = table
           @foreign_key = nil
           @primary_key = nil
@@ -117,7 +117,7 @@ module RSpec
       end
 
       def refer_to(table)
-        ReferTo.new(table, db: defined?(db) ? db : ::Sequel::Model.db)
+        ReferTo.new(table, db: ::Rspec::SequelExpectations.db)
       end
     end
   end

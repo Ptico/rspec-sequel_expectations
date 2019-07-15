@@ -36,7 +36,7 @@ module RSpec
       private
 
         def initialize(column, opts = {})
-          @db = opts.fetch(:db) { ::Sequel::Model.db }
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @columns = Array(column)
           @unique = opts.fetch(:unique, false)
         end
@@ -93,11 +93,11 @@ module RSpec
       end
 
       def have_index_on(column)
-        HaveIndexOn.new(column, db: defined?(db) ? db : ::Sequel::Model.db)
+        HaveIndexOn.new(column, db: ::Rspec::SequelExpectations.db)
       end
 
       def have_unique_index_on(column)
-        HaveIndexOn.new(column, unique: true, db: defined?(db) ? db : ::Sequel::Model.db)
+        HaveIndexOn.new(column, unique: true, db: ::Rspec::SequelExpectations.db)
       end
       alias :have_uniq_index_on :have_unique_index_on
 

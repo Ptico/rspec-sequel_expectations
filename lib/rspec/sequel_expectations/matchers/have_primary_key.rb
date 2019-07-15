@@ -28,7 +28,7 @@ module RSpec
 
         def initialize(*names)
           opts = names.last.is_a?(::Hash) ? names.pop : {}
-          @db = opts.fetch(:db) { ::Sequel::Model.db }
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @names = names
           @keys  = []
         end
@@ -55,7 +55,7 @@ module RSpec
       end
 
       def have_primary_key(*names)
-        HavePrimaryKey.new(*names, db: defined?(db) ? db : ::Sequel::Model.db)
+        HavePrimaryKey.new(*names, db: ::Rspec::SequelExpectations.db)
       end
       alias :have_primary_keys :have_primary_key
 

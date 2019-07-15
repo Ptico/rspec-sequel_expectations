@@ -14,7 +14,7 @@ describe DB do
 end
 
 describe 'companies table' do
-  let(:db) { ::Sequel::Model.db } # default
+  let(:db) { defined?(DB) ? DB : ::Sequel::Model.db } # default
   let(:table) { :companies }
 
   it { expect(table).to have_primary_keys(:id, :city_id) }
