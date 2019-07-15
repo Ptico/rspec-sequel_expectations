@@ -10,3 +10,8 @@ development:
   user: postgres
   password: secret
   <<: *default
+
+test:
+  database: myapp_test
+  user: postgres
+  <<: *default

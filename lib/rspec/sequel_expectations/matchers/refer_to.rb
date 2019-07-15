@@ -48,7 +48,8 @@ module RSpec
 
       private
 
-        def initialize(table)
+        def initialize(table, opts = {})
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @table       = table
           @foreign_key = nil
           @primary_key = nil
@@ -111,12 +112,12 @@ module RSpec
 
         def get_reference_for(relation)
           @relation  = relation
-          @reference = DB.foreign_key_list(relation).select { |fk| fk[:table] == @table }.first
+          @reference = @db.foreign_key_list(relation).select { |fk| fk[:table] == @table }.first
         end
       end
 
       def refer_to(table)
-        ReferTo.new(table)
+        ReferTo.new(table, db: ::Rspec::SequelExpectations.db)
       end
     end
   end

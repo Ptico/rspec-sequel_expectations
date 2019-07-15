@@ -2,22 +2,23 @@
 
 RSpec matchers for Sequel which tests database, not model
 
-## Using
+## Usage
 
 ```ruby
 RSpec.configure do |config|
   config.include RSpec::Matchers::Sequel
 end
 
-describe DB do 
+describe DB do
   it { expect(DB).to have_enum('role_types').with_values(%w(admin manager user)) }
 end
 
 describe 'companies table' do
+  let(:db) { defined?(DB) ? DB : ::Sequel::Model.db } # default
   let(:table) { :companies }
 
   it { expect(table).to have_primary_keys(:id, :city_id) }
-  it { expect(table).to have_column(:name).of_type(String).not_null.with_default('') }
+  it { expect(table).to have_column(:name).of_type(String).size(50).not_null.with_default('') }
 
   it { expect(table).to have_unique_index_on(:email) }
   it { expect(table).to have_index_on([:password, :email]).named('companies_credentials') }

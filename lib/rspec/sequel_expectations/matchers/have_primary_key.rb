@@ -27,12 +27,14 @@ module RSpec
       private
 
         def initialize(*names)
+          opts = names.last.is_a?(::Hash) ? names.pop : {}
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @names = names
           @keys  = []
         end
 
         def get_keys
-          @keys = DB.schema(@table).reject { |tuple| !tuple.last[:primary_key] }.map(&:first)
+          @keys = @db.schema(@table).reject { |tuple| !tuple.last[:primary_key] }.map(&:first)
         end
 
         def includes_all?
@@ -53,7 +55,7 @@ module RSpec
       end
 
       def have_primary_key(*names)
-        HavePrimaryKey.new(*names)
+        HavePrimaryKey.new(*names, db: ::Rspec::SequelExpectations.db)
       end
       alias :have_primary_keys :have_primary_key
 

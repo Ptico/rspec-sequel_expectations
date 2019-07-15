@@ -55,7 +55,8 @@ module RSpec
 
       private
 
-        def initialize(column_name)
+        def initialize(column_name, opts = {})
+          @db = opts.fetch(:db) { ::Rspec::SequelExpectations.db }
           @name    = column_name
           @type    = nil
           @null    = nil
@@ -66,7 +67,7 @@ module RSpec
         end
 
         def get_column_from(table)
-          column  = DB.schema(table.to_sym).detect { |tuple| tuple.first == @name }
+          column = @db.schema(table.to_sym).detect { |tuple| tuple.first == @name }
 
           @table  = table
           @column = column ? column.last : nil
@@ -84,7 +85,7 @@ module RSpec
         def correct_type?
           return true unless @type
 
-          expected = DB.send(:type_literal, type: @type).to_s
+          expected = @db.send(:type_literal, type: @type).to_s
           actual   = [@column[:type].to_s, @column[:db_type].to_s]
 
           if actual.include?(expected)
@@ -130,7 +131,7 @@ module RSpec
       end
 
       def have_column(name)
-        HaveColumn.new(name)
+        HaveColumn.new(name, db: ::Rspec::SequelExpectations.db)
       end
 
     end
